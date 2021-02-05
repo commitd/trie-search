@@ -1,4 +1,4 @@
-![](https://nodei.co/npm/trie-search.png?downloads=True&stars=True)
+![](https://nodei.co/npm/@committed/trie-search.png?downloads=True&stars=True)
 
 Trie-Search
 ===========
