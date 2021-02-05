@@ -72,7 +72,16 @@ export type TrieNode<O> = Record<string, (TrieNode<O> | O)[]>
 
 export type KeyFields = (ObjectKey | ObjectKey[])[]
 
-type Reducer<O = {}> = (
+export type TrieJson<O = unknown> = {
+  root: TrieNode<O>
+  keyFields: KeyFields
+  options: Omit<
+    TrieOptions,
+    "expandRegexes" | "idFieldOrFunction" | "splitOnGetRegEx" | "splitOnRegEx"
+  >
+}
+
+export type Reducer<O = {}> = (
   accumulator: O[] | undefined,
   phrase: string,
   matches: O[],
@@ -90,6 +99,12 @@ export class TrieSearch<O = {}> {
     keepAllKey: "id",
     maxCacheSize: MAX_CACHE_SIZE,
     splitOnRegEx: /\s/g,
+  }
+
+  public static fromJson<O = {}>(json: TrieJson<O>): TrieSearch<O> {
+    const ts = new TrieSearch<O>(json.keyFields, json.options)
+    ts.root = json.root
+    return ts
   }
 
   static readonly UNION_REDUCER: Reducer = function <O = {}>(
@@ -479,5 +494,48 @@ export class TrieSearch<O = {}> {
       ? idFieldOrFunction(item)
       : // @ts-ignore
         item[idFieldOrFunction]
+  }
+
+  public toJson(): TrieJson {
+    if (
+      this.options.expandRegexes !== TrieSearch.DEFAULT_OPTIONS.expandRegexes
+    ) {
+      throw new Error(
+        "JSON export of non-default expandRegexes option not supported"
+      )
+    }
+    if (
+      this.options.idFieldOrFunction !==
+      TrieSearch.DEFAULT_OPTIONS.idFieldOrFunction
+    ) {
+      throw new Error(
+        "JSON export of non-default idFieldOrFunction option not supported"
+      )
+    }
+    if (
+      // NOTE: default value of splitOnGetRegEx is splitOnRegEx
+      this.options.splitOnGetRegEx !== TrieSearch.DEFAULT_OPTIONS.splitOnRegEx
+    ) {
+      throw new Error(
+        "JSON export of non-default splitOnGetRegEx option not supported"
+      )
+    }
+    if (this.options.splitOnRegEx !== TrieSearch.DEFAULT_OPTIONS.splitOnRegEx) {
+      throw new Error(
+        "JSON export of non-default splitOnRegEx option not supported"
+      )
+    }
+    const {
+      expandRegexes,
+      idFieldOrFunction,
+      splitOnGetRegEx,
+      splitOnRegEx,
+      ...options
+    } = this.options
+    return {
+      keyFields: this.keyFields,
+      options,
+      root: this.root,
+    }
   }
 }
