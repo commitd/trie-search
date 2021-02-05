@@ -1,6 +1,6 @@
 {
-  "name": "@commitd/trie-search",
-  "author": "Jonathan Elliot <jon@committed.io>",
+  "name": "@committed/trie-search",
+  "author": "Joshua Jung <joshua.p.jung@gmail.com",
   "license": "MIT",
   "private": false,
   "description": "A trie implementation that maps keys to objects for rapid retrieval by phrases. Most common use will be for typeahead searches.",

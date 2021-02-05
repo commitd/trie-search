@@ -2,11 +2,11 @@ import get from "lodash.get"
 // @ts-ignore
 import HashArray from "hasharray"
 
-var MAX_CACHE_SIZE = 64
+const MAX_CACHE_SIZE = 64
 
-var IS_WHITESPACE = /^[\s]*$/
+const IS_WHITESPACE = /^[\s]*$/
 
-var DEFAULT_INTERNATIONALIZE_EXPAND_REGEXES = [
+const DEFAULT_INTERNATIONALIZE_EXPAND_REGEXES = [
   {
     regex: /[åäàáâãæ]/gi,
     alternate: "a",
@@ -245,9 +245,6 @@ export class TrieSearch<O = {}> {
   }
 
   public clearCache() {
-    // if (this.getCache && !this.getCache._list.length) {
-    //   return;
-    // }
     this.getCache = new HashArray("key")
   }
 
